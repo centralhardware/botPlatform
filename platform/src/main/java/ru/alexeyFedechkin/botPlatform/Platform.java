@@ -11,14 +11,14 @@ import java.util.List;
  * @author fedechkin_alexey
  */
 @Log4j
-public class Bot {
+public class Platform {
 
     private List<IBot> botList = new ArrayList<>();
 
     /**
      * @param config bots configuration
      */
-    public Bot(BotConfig config){
+    public Platform(BotConfig config){
         if (config.getTelegramConfig().isPresent()){
             botList.add(new TelegramBot(config.getBotHandler(), config.getTelegramConfig().get()));
         }
