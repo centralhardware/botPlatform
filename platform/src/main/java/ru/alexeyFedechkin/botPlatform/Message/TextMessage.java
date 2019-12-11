@@ -1,13 +1,15 @@
 package ru.alexeyFedechkin.botPlatform.Message;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
+ * text message presentation
  * @author fedechkin_alexey
  */
 public class TextMessage implements Message {
 
-    public TextMessage(String message, long chatId){
+    public TextMessage(@NonNull String message, @NonNull long chatId){
         this.message = message;
         this.chatId = chatId;
     }

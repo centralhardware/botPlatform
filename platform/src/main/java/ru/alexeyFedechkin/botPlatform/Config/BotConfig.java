@@ -9,6 +9,7 @@ import java.util.Optional;
 
 /**
  * configuration for bots
+ * bot will be start if Optional is have object
  * @author fedechkin_alexey
  */
 @AllArgsConstructor
@@ -20,5 +21,7 @@ public class BotConfig {
     private Optional<TelegramConfig> telegramConfig;
     @Getter
     private Optional<VKConfig> vkConfig;
+    @Getter
+    private boolean isCommandAnnotationSupport;
 
 }

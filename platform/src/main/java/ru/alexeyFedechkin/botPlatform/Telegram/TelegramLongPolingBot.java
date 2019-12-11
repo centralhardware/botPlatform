@@ -18,14 +18,21 @@ public class TelegramLongPolingBot extends TelegramLongPollingBot {
         this.listener = listener;
     }
 
+    /**
+     * redirecting incoming updates to the implementation of AbstractBot through the listener
+     * @param update incoming update
+     */
+    @Override
     public void onUpdateReceived(Update update) {
         listener.update(update);
     }
 
+    @Override
     public String getBotUsername() {
         return config.getUsername();
     }
 
+    @Override
     public String getBotToken() {
         return config.getToken();
     }
