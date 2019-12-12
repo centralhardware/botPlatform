@@ -13,6 +13,25 @@ To use the definition of bot behavior,
 you must redefine the interface methods BotHandler. 
 Create class instance ?? and transfer there BotConfig
 
+#### feature
+
+##### @Command
+
+for handle command
+ (it's string that start with '/' symbol, for example '/start')
+ you can user @Command annotation. for example:
+ 
+```java
+@Command(commandName = "/start")
+public static Message helloworld(TextMessage message){
+    return message.reply("hello world");
+}
+```
+When the bot receives a message that starts with a slash, 
+if the code contains an annotation with this command, 
+the message will be processed by the method annotated with this annotation,
+ ps the text without the command will come to the method
+
 #### echo bot example
 
 you can find an example of echo bot in modules Example in the source code 
