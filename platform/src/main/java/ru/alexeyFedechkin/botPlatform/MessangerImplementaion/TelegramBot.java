@@ -48,6 +48,10 @@ public class TelegramBot extends AbstractBot {
         log.info("telegram bot start");
     }
 
+    /**
+     * redirecting incoming message to handlers
+     * @param update incoming update
+     */
     public void onUpdate(Update update) {
         if (update.hasMessage()){
             if (update.getMessage().hasAudio()){

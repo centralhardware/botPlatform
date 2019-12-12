@@ -43,6 +43,13 @@ of the library
 - audio
 - voice  
 
+### tests 
+
+since the platform uses its own types of messages that are independent of
+specific implementations, 
+you can test handlers deterministically in any way, without the need to
+create an environment
+
 ### used library:
 - [TelegramBots](https://github.com/rubenlagus/TelegramBots)
 - [vk-bot-java-sdk](https://github.com/petersamokhin/vk-bot-java-sdk)
