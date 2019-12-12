@@ -13,8 +13,8 @@ import ru.alexeyFedechkin.botPlatform.Message.*;
 @Log4j
 public abstract class AbstractBot implements IBot {
 
-    private BotHandler handler;
-    private boolean isCommandAnnotationSupport;
+    private final BotHandler handler;
+    private final boolean isCommandAnnotationSupport;
     private CommandFilter filter;
 
     protected AbstractBot(BotHandler handler, boolean isCommandAnnotationSupport) {
@@ -31,7 +31,7 @@ public abstract class AbstractBot implements IBot {
 
     /**
      * @implNote не нашел как сделать фильтрацию лучше
-     * @param message
+     * @param message incoming text message
      */
     @Override
     public void onTextReceive(TextMessage message) {

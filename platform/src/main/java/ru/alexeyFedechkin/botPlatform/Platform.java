@@ -1,5 +1,6 @@
 package ru.alexeyFedechkin.botPlatform;
 
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
 import ru.alexeyFedechkin.botPlatform.Config.BotConfig;
 import ru.alexeyFedechkin.botPlatform.MessangerImplementaion.TelegramBot;
@@ -20,7 +21,7 @@ public class Platform {
     /**
      * @param config bots configuration
      */
-    public Platform(BotConfig config){
+    public Platform(@NonNull BotConfig config){
         if (config.getTelegramConfig().isPresent()){
             botList.add(new TelegramBot(config.getBotHandler(), config.getTelegramConfig().get(), config.isCommandAnnotationSupport()));
         }

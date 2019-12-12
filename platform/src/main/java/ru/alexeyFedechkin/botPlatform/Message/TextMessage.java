@@ -20,7 +20,7 @@ public class TextMessage implements Message {
     private long chatId;
 
     /**
-     * @return
+     * @return this object with modified text field
      */
     public TextMessage reply(String message){
         this.message = message;

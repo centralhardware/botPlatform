@@ -37,7 +37,7 @@ public class TelegramBot extends AbstractBot {
         try{
             switch (config.getType()){
                 case LONG_POOLING:{
-                    bot = new TelegramLongPolingBot(config, update -> onUpdate(update));
+                    bot = new TelegramLongPolingBot(config, this::onUpdate);
                     botsApi.registerBot((LongPollingBot) bot);
                 }
                 case WEB_HOOK:break;

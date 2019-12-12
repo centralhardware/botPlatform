@@ -3,8 +3,6 @@ package ru.alexeyFedechkin.botPlatform.Command;
 import lombok.extern.log4j.Log4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import ru.alexeyFedechkin.botPlatform.Command.Command;
-import ru.alexeyFedechkin.botPlatform.Command.CommandFilteredException;
 import ru.alexeyFedechkin.botPlatform.Message.Message;
 import ru.alexeyFedechkin.botPlatform.Message.TextMessage;
 
@@ -24,7 +22,7 @@ public class CommandFilter {
     private Map<String, Method> commands = new HashMap<>();
 
     /**
-     *
+     * validate  methods annotated @Command and put valid method to HashMap
      */
     public CommandFilter(){
         var methods = getCommandMethods();
@@ -49,9 +47,9 @@ public class CommandFilter {
     }
 
     /**
-     * @param message
-     * @return
-     * @throws CommandFilteredException
+     * check TextMessage on command
+     * @param message incoming message
+     * @throws CommandFilteredException thrown if message handled
      */
     public void doFilter(TextMessage message) throws CommandFilteredException{
         if (message.getMessage().startsWith("/")){
@@ -61,19 +59,24 @@ public class CommandFilter {
                         Message answer = (Message) commands.get(commandName).invoke(null,new TextMessage(message.getMessage().replace(commandName, ""), message.getChatId()));
                         throw new CommandFilteredException(answer);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        log.info("", e);
                     }
                 }
             }
         }
     }
 
+    /**
+     * count of method annotated with @Command
+     * @return count of method
+     */
     public static int getCountOfAnnotatedMethod(){
         return getCommandMethods().size();
     }
 
     /**
-     * @return
+     *  get method that annotated with @Command
+     * @return Set of method
      */
     private static Set<Method> getCommandMethods() {
         Reflections reflections = new Reflections("",new MethodAnnotationsScanner());

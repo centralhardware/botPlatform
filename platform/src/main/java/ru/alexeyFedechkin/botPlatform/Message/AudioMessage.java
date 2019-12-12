@@ -5,7 +5,7 @@ import lombok.NonNull;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.Audio;
 
-import java.io.File;
+import java.util.Objects;
 
 /**
  * audio message submission
@@ -15,11 +15,7 @@ public class AudioMessage implements Message {
 
     public AudioMessage(long chatId, String caption){
         this.chatId = chatId;
-        if (caption == null){
-            this.caption = "";
-        } else {
-            this.caption = caption;
-        }
+        this.caption = Objects.requireNonNullElse(caption, "");
     }
 
     public AudioMessage(long chatId, String caption, @NonNull JSONObject audio) {

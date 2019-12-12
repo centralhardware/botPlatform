@@ -3,6 +3,8 @@ package ru.alexeyFedechkin.botPlatform.Message;
 import lombok.Getter;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 /**
  * 
  */
@@ -10,11 +12,7 @@ public class VoiceMessage implements Message {
 
     public VoiceMessage(long chatId, String caption){
         this.chatId = chatId;
-        if (caption == null){
-            this.caption = "";
-        } else {
-            this.caption = caption;
-        }
+        this.caption = Objects.requireNonNullElse(caption, "");
     }
 
     public VoiceMessage(long chatId, String caption, JSONObject voice) {
