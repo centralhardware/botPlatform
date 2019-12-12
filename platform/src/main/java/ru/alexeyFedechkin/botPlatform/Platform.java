@@ -22,10 +22,10 @@ public class Platform {
      */
     public Platform(BotConfig config){
         if (config.getTelegramConfig().isPresent()){
-            botList.add(new TelegramBot(config.getBotHandler(), config.getTelegramConfig().get()));
+            botList.add(new TelegramBot(config.getBotHandler(), config.getTelegramConfig().get(), config.isCommandAnnotationSupport()));
         }
         if (config.getVkConfig().isPresent()){
-            botList.add(new VKBot(config.getBotHandler(), config.getVkConfig().get()));
+            botList.add(new VKBot(config.getBotHandler(), config.getVkConfig().get(), config.isCommandAnnotationSupport()));
         }
         log.info("bot platform start");
     }

@@ -1,5 +1,8 @@
 package ru.alexeyFedechkin.botPlatform;
 
+import lombok.extern.log4j.Log4j;
+import ru.alexeyFedechkin.botPlatform.Command.CommandFilter;
+import ru.alexeyFedechkin.botPlatform.Command.CommandFilteredException;
 import ru.alexeyFedechkin.botPlatform.Message.*;
 
 /**
@@ -7,6 +10,7 @@ import ru.alexeyFedechkin.botPlatform.Message.*;
  * @see BotHandler
  * @author fedechkin_alexey
  */
+@Log4j
 public abstract class AbstractBot implements IBot {
 
     private BotHandler handler;
@@ -15,6 +19,14 @@ public abstract class AbstractBot implements IBot {
 
     protected AbstractBot(BotHandler handler, boolean isCommandAnnotationSupport) {
         this.handler = handler;
+        this.isCommandAnnotationSupport = isCommandAnnotationSupport;
+        if (isCommandAnnotationSupport){
+            filter = new CommandFilter();
+        } else {
+            if (CommandFilter.getCountOfAnnotatedMethod() > 0){
+                log.info("isCommandAnnotationSupport = false but found " + CommandFilter.getCountOfAnnotatedMethod() + " @Command annotation");
+            }
+        }
     }
 
     /**
@@ -27,7 +39,7 @@ public abstract class AbstractBot implements IBot {
             try {
                 filter.doFilter(message);
             } catch (CommandFilteredException e) {
-                sendMessage(e.getMessage());
+                sendMessage(e.getMsg());
                 return;
             }
         }

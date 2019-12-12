@@ -31,8 +31,8 @@ public class TelegramBot extends AbstractBot {
         ApiContextInitializer.init();
     }
 
-    public TelegramBot(BotHandler handler, TelegramConfig config) {
-        super(handler);
+    public TelegramBot(BotHandler handler, TelegramConfig config, boolean isCommandSupport) {
+        super(handler, isCommandSupport);
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try{
             switch (config.getType()){
@@ -92,6 +92,7 @@ public class TelegramBot extends AbstractBot {
         }
         try {
             bot.execute(sendPhoto);
+            log.info("sent photo message");
         } catch (TelegramApiException e) {
             log.info("", e);
         }
@@ -105,6 +106,7 @@ public class TelegramBot extends AbstractBot {
         sendAudio.setAudio(message.getAudio());
         try {
             bot.execute(sendAudio);
+            log.info("sent audio message");
         } catch (TelegramApiException e) {
             log.info("", e);
         }
@@ -118,6 +120,7 @@ public class TelegramBot extends AbstractBot {
         sendVoice.setVoice(message.getVoice());
         try {
             bot.execute(sendVoice);
+            log.info("sent voice message");
         } catch (TelegramApiException e) {
             log.info("", e);
         }

@@ -18,4 +18,12 @@ public class TextMessage implements Message {
     private String message;
     @Getter
     private long chatId;
+
+    /**
+     * @return
+     */
+    public TextMessage reply(String message){
+        this.message = message;
+        return this;
+    }
 }

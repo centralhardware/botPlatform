@@ -1,7 +1,7 @@
 package ru.alexeyFedechkin.botPlatform.example;
 
 import ru.alexeyFedechkin.botPlatform.BotHandler;
-import ru.alexeyFedechkin.botPlatform.Command;
+import ru.alexeyFedechkin.botPlatform.Command.Command;
 import ru.alexeyFedechkin.botPlatform.Message.*;
 
 public class MyBot implements BotHandler {
@@ -27,7 +27,7 @@ public class MyBot implements BotHandler {
     }
 
     @Command(commandName = "/start")
-    public Message start(TextMessage message){
-        return null;
+    public static Message start(TextMessage message){
+        return message.reply("this is work");
     }
 }

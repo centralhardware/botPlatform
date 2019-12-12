@@ -20,18 +20,31 @@ public class VKBot extends AbstractBot {
 
     private Group group;
 
-    public VKBot(BotHandler handler, VKConfig config) {
-        super(handler);
+    public VKBot(BotHandler handler, VKConfig config, boolean isCommandSupport) {
+        super(handler, isCommandSupport);
         group = new Group(config.getId(), config.getAccessToken());
-        group.onSimpleTextMessage(message -> onTextReceive(new TextMessage(message.getText(), message.authorId())));
-        group.onPhotoMessage(message -> onImageReceive(new ImageMessage(message.authorId(), message.getText(), message.getBiggestPhotoUrl(message.getPhotos()))));
-        group.onAudioMessage(message -> onAudioReceive(new AudioMessage(message.authorId(), message.getText(), message.getVoiceMessage())));
-        group.onVoiceMessage(message -> onVoiceReceive(new VoiceMessage(message.authorId(), message.getText(), message.getVoiceMessage())));
+        group.onSimpleTextMessage(message -> {
+            log.info("receive text message " + message.getText());
+            onTextReceive(new TextMessage(message.getText(), message.authorId()));
+        });
+        group.onPhotoMessage(message -> {
+            log.info("receive photo message " + message.getBiggestPhotoUrl(message.getPhotos()));
+            onImageReceive(new ImageMessage(message.authorId(), message.getText(), message.getBiggestPhotoUrl(message.getPhotos())));
+        });
+        group.onAudioMessage(message -> {
+            log.info("receive audio message ");
+            onAudioReceive(new AudioMessage(message.authorId(), message.getText(), message.getVoiceMessage()));
+        });
+        group.onVoiceMessage(message -> {
+            log.info("receive voice message " );
+            onVoiceReceive(new VoiceMessage(message.authorId(), message.getText(), message.getVoiceMessage()));
+        });
         log.info("vk bot start");
     }
 
     @Override
     public void sendText(TextMessage message) {
+        log.info("send message: " + message.getMessage());
         new Message().
                 from(group).
                 to((int) message.getChatId()).
@@ -41,7 +54,7 @@ public class VKBot extends AbstractBot {
 
     @Override
     public void sendImage(ImageMessage message) {
-        System.out.println(message.getImage());
+        log.info("send photo message: " + message.getCaption());
         new Message().
                 from(group).
                 to((int) message.getChatId()).
@@ -51,7 +64,6 @@ public class VKBot extends AbstractBot {
 
     @Override
     public void sendAudio(AudioMessage message) {
-
     }
 
     @Override
