@@ -68,7 +68,7 @@ public class TelegramBot extends AbstractBot {
             }
             if (update.getMessage().hasText()){
                 log.info("receive text message: " + update.getMessage().getText());
-                onTextReceive(new TextMessage(update.getMessage().getText(), update.getMessage().getChatId()));
+                onTextReceive(new TextMessage(update.getMessage().getMessageId() , update.getMessage().getText(), update.getMessage().getChatId()));
             }
         }
     }
@@ -78,6 +78,9 @@ public class TelegramBot extends AbstractBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(message.getMessage());
+        if (message.getForwardTo() != 0){
+            sendMessage.setReplyToMessageId((int) message.getForwardTo());
+        }
         try{
             bot.execute(sendMessage);
             log.info("sent text message: " + message.getMessage());
@@ -94,6 +97,9 @@ public class TelegramBot extends AbstractBot {
         if (!message.getCaption().isEmpty()){
             sendPhoto.setCaption(message.getCaption());
         }
+        if (message.getForwardTo() != 0){
+            sendPhoto.setReplyToMessageId((int) message.getForwardTo());
+        }
         try {
             bot.execute(sendPhoto);
             log.info("sent photo message");
@@ -108,6 +114,9 @@ public class TelegramBot extends AbstractBot {
         sendAudio.setChatId(message.getChatId());
         sendAudio.setCaption(message.getCaption());
         sendAudio.setAudio(message.getAudio());
+        if (message.getForwardTo() != 0){
+            sendAudio.setReplyToMessageId((int) message.getForwardTo());
+        }
         try {
             bot.execute(sendAudio);
             log.info("sent audio message");
@@ -122,6 +131,9 @@ public class TelegramBot extends AbstractBot {
         sendVoice.setChatId(message.getChatId());
         sendVoice.setCaption(message.getCaption());
         sendVoice.setVoice(message.getVoice());
+        if (message.getForwardTo() != 0){
+            sendVoice.setReplyToMessageId((int) message.getForwardTo());
+        }
         try {
             bot.execute(sendVoice);
             log.info("sent voice message");

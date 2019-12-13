@@ -56,7 +56,7 @@ public class CommandFilter {
             for (String commandName : commands.keySet()){
                 if (message.getMessage().startsWith(commandName)){
                     try {
-                        Message answer = (Message) commands.get(commandName).invoke(null,new TextMessage(message.getMessage().replace(commandName, ""), message.getChatId()));
+                        Message answer = (Message) commands.get(commandName).invoke(null,message.answer(message.getMessage().replace(commandName,"")));
                         throw new CommandFilteredException(answer);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         log.info("", e);

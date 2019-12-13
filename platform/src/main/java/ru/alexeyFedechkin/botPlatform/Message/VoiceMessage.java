@@ -26,6 +26,10 @@ public class VoiceMessage implements Message {
     }
 
     @Getter
+    private long messageId;
+    @Getter
+    private long forwardTo;
+    @Getter
     private long chatId;
     @Getter
     private String caption;

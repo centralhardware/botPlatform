@@ -10,7 +10,7 @@ import ru.alexeyFedechkin.botPlatform.Message.VoiceMessage;
  */
 public interface IBot {
    //********************************************************
-   // implemented in AbstractBot
+   // must be implemented for each MessengerImplementation
    //********************************************************
    void sendText(TextMessage message);
 
@@ -20,7 +20,7 @@ public interface IBot {
 
    void sendVoice(VoiceMessage message);
    //********************************************************
-   // must be implemented for each MessengerImplementation
+   // implemented in AbstractBot
    //********************************************************
    void onTextReceive(TextMessage message);
 

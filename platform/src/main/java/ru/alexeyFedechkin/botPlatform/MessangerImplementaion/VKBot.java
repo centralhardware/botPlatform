@@ -2,6 +2,7 @@ package ru.alexeyFedechkin.botPlatform.MessangerImplementaion;
 
 import com.petersamokhin.bots.sdk.clients.Group;
 import com.petersamokhin.bots.sdk.objects.Message;
+import com.petersamokhin.bots.sdk.utils.vkapi.docs.DocTypes;
 import lombok.extern.log4j.Log4j;
 import ru.alexeyFedechkin.botPlatform.AbstractBot;
 import ru.alexeyFedechkin.botPlatform.BotHandler;
@@ -25,7 +26,7 @@ public class VKBot extends AbstractBot {
         group = new Group(config.getId(), config.getAccessToken());
         group.onSimpleTextMessage(message -> {
             log.info("receive text message " + message.getText());
-            onTextReceive(new TextMessage(message.getText(), message.authorId()));
+            onTextReceive(new TextMessage(message.getMessageId() ,message.getText(), message.authorId()));
         });
         group.onPhotoMessage(message -> {
             log.info("receive photo message " + message.getBiggestPhotoUrl(message.getPhotos()));
@@ -64,6 +65,12 @@ public class VKBot extends AbstractBot {
 
     @Override
     public void sendAudio(AudioMessage message) {
+        log.info("send audio message: " + message.getCaption());
+        new Message().
+                from(group).
+                to((int) message.getChatId()).
+                doc(message.getAudio(), DocTypes.AUDIO_MESSAGE).
+                send();
     }
 
     @Override

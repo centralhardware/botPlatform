@@ -33,9 +33,15 @@ public class AudioMessage implements Message {
     }
 
     @Getter
+    private long messageId;
+    @Getter
+    private long forwardTo;
+    @Getter
     private long chatId;
     @Getter
     private String caption;
     @Getter
     private String audio;
+
+
 }
