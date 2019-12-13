@@ -50,6 +50,7 @@ public class VKBot extends AbstractBot {
                 from(group).
                 to((int) message.getChatId()).
                 text(message.getMessage()).
+                forwardedMessages(message.getForwardTo()).
                 send();
     }
 
@@ -60,6 +61,7 @@ public class VKBot extends AbstractBot {
                 from(group).
                 to((int) message.getChatId()).
                 photo(message.getImage()).
+                forwardedMessages(message.getForwardTo()).
                 send();
     }
 
@@ -70,6 +72,7 @@ public class VKBot extends AbstractBot {
                 from(group).
                 to((int) message.getChatId()).
                 doc(message.getAudio(), DocTypes.AUDIO_MESSAGE).
+                forwardedMessages(message.getForwardTo()).
                 send();
     }
 

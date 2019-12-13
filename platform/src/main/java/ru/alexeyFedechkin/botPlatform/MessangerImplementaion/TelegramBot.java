@@ -78,9 +78,7 @@ public class TelegramBot extends AbstractBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(message.getMessage());
-        if (message.getForwardTo() != 0){
-            sendMessage.setReplyToMessageId((int) message.getForwardTo());
-        }
+        sendMessage.setReplyToMessageId((int) message.getForwardTo());
         try{
             bot.execute(sendMessage);
             log.info("sent text message: " + message.getMessage());
@@ -94,9 +92,7 @@ public class TelegramBot extends AbstractBot {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(message.getChatId());
         sendPhoto.setPhoto(message.getImage());
-        if (!message.getCaption().isEmpty()){
-            sendPhoto.setCaption(message.getCaption());
-        }
+        sendPhoto.setCaption(message.getCaption());
         if (message.getForwardTo() != 0){
             sendPhoto.setReplyToMessageId((int) message.getForwardTo());
         }
@@ -114,9 +110,7 @@ public class TelegramBot extends AbstractBot {
         sendAudio.setChatId(message.getChatId());
         sendAudio.setCaption(message.getCaption());
         sendAudio.setAudio(message.getAudio());
-        if (message.getForwardTo() != 0){
-            sendAudio.setReplyToMessageId((int) message.getForwardTo());
-        }
+        sendAudio.setReplyToMessageId((int) message.getForwardTo());
         try {
             bot.execute(sendAudio);
             log.info("sent audio message");
@@ -131,9 +125,7 @@ public class TelegramBot extends AbstractBot {
         sendVoice.setChatId(message.getChatId());
         sendVoice.setCaption(message.getCaption());
         sendVoice.setVoice(message.getVoice());
-        if (message.getForwardTo() != 0){
-            sendVoice.setReplyToMessageId((int) message.getForwardTo());
-        }
+        sendVoice.setReplyToMessageId((int) message.getForwardTo());
         try {
             bot.execute(sendVoice);
             log.info("sent voice message");
