@@ -1,5 +1,6 @@
 package ru.alexeyFedechkin.botPlatform.Telegram;
 
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.alexeyFedechkin.botPlatform.Config.TelegramConfig;
@@ -12,6 +13,12 @@ public class TelegramLongPolingBot extends TelegramLongPollingBot {
 
     private TelegramConfig config;
     private TelegramUpdateListener listener;
+
+    public TelegramLongPolingBot(TelegramConfig config, TelegramUpdateListener listener, DefaultBotOptions defaultBotOptions){
+        super(defaultBotOptions);
+        this.config = config;
+        this.listener = listener;
+    }
 
     public TelegramLongPolingBot(TelegramConfig config, TelegramUpdateListener listener){
         this.config = config;

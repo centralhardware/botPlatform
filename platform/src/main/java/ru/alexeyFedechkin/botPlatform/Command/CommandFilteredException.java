@@ -9,6 +9,9 @@ import ru.alexeyFedechkin.botPlatform.Message.Message;
  */
 public class CommandFilteredException extends Exception {
 
+    /**
+     * answer of annotated method that handle incoming TextMessage
+     */
     @Getter
     private Message msg;
 

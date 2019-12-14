@@ -16,4 +16,6 @@ public interface BotHandler {
 
     Message onVoice(VoiceMessage message);
 
+    Message onDocument(DocumentMessage message);
+
 }

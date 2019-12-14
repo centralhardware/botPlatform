@@ -14,25 +14,21 @@ import java.util.Objects;
  */
 public class AudioMessage implements Message {
 
-    public AudioMessage(long chatId, String caption){
+    private AudioMessage(Integer messageId,long chatId, String caption){
         this.chatId = chatId;
         this.caption = Objects.requireNonNullElse(caption, "");
+        this.messageId = messageId;
     }
 
-    public AudioMessage(long chatId, String caption, @NonNull JSONObject audio) {
-        this(chatId, caption);
+    public AudioMessage(Integer messageId,Integer chatId, String caption, @NonNull JSONObject audio) {
+        this(messageId,chatId, caption);
         this.audio = audio.getString("attach1");
         System.out.println(audio);
     }
 
-    public AudioMessage(long chatId, String caption, @NonNull Audio audio) {
-        this(chatId, caption);
+    public AudioMessage(Integer messageId,long chatId, String caption, @NonNull Audio audio) {
+        this(messageId,chatId, caption);
         this.audio = audio.getFileId();
-    }
-
-    public AudioMessage(long chatId, String caption, @NonNull String audio) {
-        this(chatId, caption);
-        this.audio = audio;
     }
 
     @Getter
@@ -46,6 +42,5 @@ public class AudioMessage implements Message {
     private String caption;
     @Getter
     private String audio;
-
 
 }

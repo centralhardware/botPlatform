@@ -3,6 +3,8 @@ package ru.alexeyFedechkin.botPlatform.MessangerImplementaion;
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -34,8 +36,19 @@ public class TelegramBot extends AbstractBot {
         try{
             switch (config.getType()){
                 case LONG_POOLING:{
-                    bot = new TelegramLongPolingBot(config, this::onUpdate);
-                    botsApi.registerBot((LongPollingBot) bot);
+                    if (config.getProxyConfig().isPresent()){
+                        var proxyConfig = config.getProxyConfig().get();
+                        var botOption = ApiContext.getInstance(DefaultBotOptions.class);
+                        botOption.setProxyHost(proxyConfig.getHost());
+                        botOption.setProxyPort(proxyConfig.getPort());
+                        botOption.setProxyType(proxyConfig.getProxyType());
+                        bot = new TelegramLongPolingBot(config, this::onUpdate, botOption);
+                        botsApi.registerBot((LongPollingBot) bot);
+                    } else {
+                        bot = new TelegramLongPolingBot(config, this::onUpdate);
+                        botsApi.registerBot((LongPollingBot) bot);
+                    }
+
                 }
                 case WEB_HOOK:break;
             }
@@ -52,21 +65,26 @@ public class TelegramBot extends AbstractBot {
     public void onUpdate(Update update) {
         if (update.hasMessage()){
             var message = update.getMessage();
+            var messageId = message.getMessageId();
             if (update.getMessage().hasAudio()){
-                log.info("receive audio message: " + update.getMessage().getAudio().getTitle());
-                onAudioReceive(new AudioMessage(message.getChatId(),message.getCaption(),message.getAudio()));
+                log.info("receive audio message: " + message.getAudio().getTitle());
+                onAudioReceive(new AudioMessage(messageId,message.getChatId(),message.getCaption(),message.getAudio()));
             }
             if (update.getMessage().hasVoice()){
-                log.info("receive voice message: " + update.getMessage().getVoice().getFileId());
-                onVoiceReceive(new VoiceMessage(message.getChatId(),message.getCaption(),message.getVoice().getFileId()));
+                log.info("receive voice message: " + message.getVoice().getFileId());
+                onVoiceReceive(new VoiceMessage(messageId,message.getChatId(),message.getCaption(),message.getVoice().getFileId()));
             }
             if (update.getMessage().hasPhoto()){
-                log.info("receive photo message: " + update.getMessage().getPhoto().get(0).getFileId());
-                onImageReceive(new ImageMessage(message.getChatId(), message.getCaption(), message.getPhoto()));
+                log.info("receive photo message: " + message.getPhoto().get(0).getFileId());
+                onImageReceive(new ImageMessage(messageId,message.getChatId(), message.getCaption(), message.getPhoto()));
             }
             if (update.getMessage().hasText()){
-                log.info("receive text message: " + update.getMessage().getText());
-                onTextReceive(new TextMessage(message.getMessageId() ,message.getText(),message.getChatId()));
+                log.info("receive text message: " + message.getText());
+                onTextReceive(new TextMessage(messageId ,message.getText(),message.getChatId()));
+            }
+            if (update.getMessage().hasDocument()){
+                log.info("receive document message " + message.getDocument().getFileName());
+                onDocumentReceive(new DocumentMessage(messageId,message.getChatId(), message.getCaption(),message.getDocument()));
             }
         }
     }
@@ -127,6 +145,21 @@ public class TelegramBot extends AbstractBot {
         try {
             bot.execute(sendVoice);
             log.info("sent voice message");
+        } catch (TelegramApiException e) {
+            log.info("", e);
+        }
+    }
+
+    @Override
+    public void sendDocument(DocumentMessage message) {
+        SendDocument sendDocument = new SendDocument().
+                setChatId(message.getChatId()).
+                setCaption(message.getCaption()).
+                setDocument(message.getDocument()).
+                setReplyToMessageId((int) message.getReplayTo());
+        try {
+            bot.execute(sendDocument);
+            log.info("sent document message ");
         } catch (TelegramApiException e) {
             log.info("", e);
         }

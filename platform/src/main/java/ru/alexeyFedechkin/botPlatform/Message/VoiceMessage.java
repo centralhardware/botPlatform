@@ -11,19 +11,20 @@ import java.util.Objects;
  */
 public class VoiceMessage implements Message {
 
-    public VoiceMessage(long chatId, String caption){
+    private VoiceMessage(Integer messageId,long chatId, String caption){
         this.chatId = chatId;
         this.caption = Objects.requireNonNullElse(caption, "");
+        this.messageId = messageId;
     }
 
-    public VoiceMessage(long chatId, String caption, JSONObject voice) {
-        this(chatId,caption);
+    public VoiceMessage(Integer messageId,long chatId, String caption, JSONObject voice) {
+        this(messageId,chatId,caption);
         System.out.println(voice);
         this.voice = voice.getString("url");
     }
 
-    public VoiceMessage(long chatId, String caption, String voice) {
-        this(chatId,caption);
+    public VoiceMessage(Integer messageId,long chatId, String caption, String voice) {
+        this(messageId,chatId,caption);
         this.voice = voice;
 
     }

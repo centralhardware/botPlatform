@@ -26,6 +26,11 @@ public class MyBot implements BotHandler {
         return message;
     }
 
+    @Override
+    public Message onDocument(DocumentMessage message) {
+        return message;
+    }
+
     @Command(commandName = "/start")
     public static Message start(TextMessage message){
         return message.reply("this is work");

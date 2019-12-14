@@ -1,9 +1,6 @@
 package ru.alexeyFedechkin.botPlatform;
 
-import ru.alexeyFedechkin.botPlatform.Message.AudioMessage;
-import ru.alexeyFedechkin.botPlatform.Message.ImageMessage;
-import ru.alexeyFedechkin.botPlatform.Message.TextMessage;
-import ru.alexeyFedechkin.botPlatform.Message.VoiceMessage;
+import ru.alexeyFedechkin.botPlatform.Message.*;
 
 /**
  * @author fedechkin_alexey
@@ -19,6 +16,8 @@ public interface IBot {
    void sendAudio(AudioMessage message);
 
    void sendVoice(VoiceMessage message);
+
+   void sendDocument(DocumentMessage message);
    //********************************************************
    // implemented in AbstractBot
    //********************************************************
@@ -29,4 +28,6 @@ public interface IBot {
    void onAudioReceive(AudioMessage message);
 
    void onVoiceReceive(VoiceMessage message);
+
+   void onDocumentReceive(DocumentMessage message);
 }

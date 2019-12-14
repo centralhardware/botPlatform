@@ -14,18 +14,19 @@ import java.util.Objects;
  */
 public class ImageMessage implements Message {
 
-    public ImageMessage(long chatId, String caption){
+    private ImageMessage(Integer messageId,long chatId, String caption){
         this.chatId = chatId;
         this.caption = Objects.requireNonNullElse(caption, "");
+        this.messageId = messageId;
     }
 
-    public ImageMessage(@NonNull long chatId,String caption, @NonNull List<PhotoSize> images) {
-        this(chatId, caption);
+    public ImageMessage(Integer messageId,@NonNull long chatId,String caption, @NonNull List<PhotoSize> images) {
+        this(messageId,chatId, caption);
         this.image = images.get(0).getFileId();
     }
 
-    public ImageMessage(long chatId, String caption, String image) {
-        this(chatId, caption);
+    public ImageMessage(Integer messageId,long chatId, String caption, String image) {
+        this(messageId,chatId, caption);
         this.image = image;
     }
 

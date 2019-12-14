@@ -8,6 +8,7 @@ import lombok.NonNull;
  * @author fedechkin_alexey
  */
 public class VKConfig {
+
     public VKConfig(@NonNull Integer id, @NonNull String accessToken) throws ConfigException {
         if (accessToken.isEmpty()){
             throw new ConfigException("access token is empty");

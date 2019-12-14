@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j;
 import ru.alexeyFedechkin.botPlatform.AbstractBot;
 import ru.alexeyFedechkin.botPlatform.BotHandler;
 import ru.alexeyFedechkin.botPlatform.Config.VKConfig;
-import ru.alexeyFedechkin.botPlatform.Message.AudioMessage;
-import ru.alexeyFedechkin.botPlatform.Message.ImageMessage;
-import ru.alexeyFedechkin.botPlatform.Message.TextMessage;
-import ru.alexeyFedechkin.botPlatform.Message.VoiceMessage;
+import ru.alexeyFedechkin.botPlatform.Message.*;
 
 /**
  * implementation of Abstract bot for VK
@@ -30,15 +27,19 @@ public class VKBot extends AbstractBot {
         });
         group.onPhotoMessage(message -> {
             log.info("receive photo message " + message.getBiggestPhotoUrl(message.getPhotos()));
-            onImageReceive(new ImageMessage(message.authorId(), message.getText(), message.getBiggestPhotoUrl(message.getPhotos())));
+            onImageReceive(new ImageMessage(message.getMessageId(),message.authorId(), message.getText(), message.getBiggestPhotoUrl(message.getPhotos())));
         });
         group.onAudioMessage(message -> {
             log.info("receive audio message ");
-            onAudioReceive(new AudioMessage(message.authorId(), message.getText(), message.getVoiceMessage()));
+            onAudioReceive(new AudioMessage(message.getMessageId(),message.authorId(), message.getText(), message.getVoiceMessage()));
         });
         group.onVoiceMessage(message -> {
             log.info("receive voice message " );
-            onVoiceReceive(new VoiceMessage(message.authorId(), message.getText(), message.getVoiceMessage()));
+            onVoiceReceive(new VoiceMessage(message.getMessageId(),message.authorId(), message.getText(), message.getVoiceMessage()));
+        });
+        group.onDocMessage(message -> {
+            log.info("receive document message");
+            onDocumentReceive(new DocumentMessage(message.getMessageId(), message.authorId(),message.getText(),message.getAttachments()));
         });
         log.info("vk bot start");
     }
@@ -84,6 +85,16 @@ public class VKBot extends AbstractBot {
                 forwardedMessages(message.getReplyTo()).
                 sendVoiceMessage(message.getVoice());
         log.info("send voice message: " + message.getCaption());
+    }
+
+    @Override
+    public void sendDocument(DocumentMessage message) {
+        new Message().
+                from(group).
+                to((int) message.getChatId()).
+                forwardedMessages(message.getReplayTo()).
+                doc(message.getDocument(), DocTypes.DOC).
+                send();
     }
 
 

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import ru.alexeyFedechkin.botPlatform.Telegram.TelegramConnectionType;
 
+import java.util.Optional;
+
 /**
  *  telegram bot configuration
  * @author fedechkin_alexey
@@ -17,11 +19,12 @@ public class TelegramConfig {
         this.username = username;
         this.token = token;
         this.type = type;
+        this.proxyConfig = Optional.empty();
     }
 
     public TelegramConfig(@NonNull String username, @NonNull String token, @NonNull TelegramConnectionType type, @NonNull ProxyConfig proxyConfig) throws ConfigException {
         this(username, token, type);
-        this.proxyConfig = proxyConfig;
+        this.proxyConfig = Optional.of(proxyConfig);
     }
 
     @Getter
@@ -31,5 +34,5 @@ public class TelegramConfig {
     @Getter
     private TelegramConnectionType type;
     @Getter
-    private ProxyConfig proxyConfig;
+    private Optional<ProxyConfig> proxyConfig;
 }

@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Command {
     /**
+     * example: '/start'
      * must startWith '/' and don't contain spaces
      */
     String commandName();

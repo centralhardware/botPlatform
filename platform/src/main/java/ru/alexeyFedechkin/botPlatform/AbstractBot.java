@@ -66,6 +66,12 @@ public abstract class AbstractBot implements IBot {
         sendMessage(answer);
     }
 
+    @Override
+    public void onDocumentReceive(DocumentMessage message) {
+        Message answer = handler.onDocument(message);
+        sendMessage(answer);
+    }
+
     /**
      * sending a response according to type
      * @param answer message to sent
@@ -79,6 +85,8 @@ public abstract class AbstractBot implements IBot {
             sendAudio((AudioMessage) answer);
         } else if (answer instanceof VoiceMessage){
             sendVoice((VoiceMessage) answer);
+        } else if (answer instanceof DocumentMessage){
+            sendDocument((DocumentMessage) answer);
         }
     }
 }

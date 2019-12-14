@@ -22,7 +22,8 @@ public class CommandFilter {
     private Map<String, Method> commands = new HashMap<>();
 
     /**
-     * validate  methods annotated @Command and put valid method to HashMap
+     * check annotated method signature and put to map by key - commandName and value - annotated method
+     * @throws RuntimeException if signature is wrong
      */
     public CommandFilter(){
         var methods = getCommandMethods();
@@ -82,7 +83,7 @@ public class CommandFilter {
     }
 
     /**
-     *  get method that annotated with @Command
+     * get method that annotated with @Command
      * @return Set of method
      */
     private static Set<Method> getCommandMethods() {
