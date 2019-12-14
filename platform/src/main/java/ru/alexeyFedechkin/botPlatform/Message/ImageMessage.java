@@ -1,11 +1,9 @@
 package ru.alexeyFedechkin.botPlatform.Message;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
-import java.util.List;
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -20,14 +18,11 @@ public class ImageMessage implements Message {
         this.messageId = messageId;
     }
 
-    public ImageMessage(Integer messageId,@NonNull long chatId,String caption, @NonNull List<PhotoSize> images) {
-        this(messageId,chatId, caption);
-        this.image = images.get(0).getFileId();
-    }
 
-    public ImageMessage(Integer messageId,long chatId, String caption, String image) {
+    public ImageMessage(Integer messageId,long chatId, String caption, String image, File imageFile) {
         this(messageId,chatId, caption);
         this.image = image;
+        this.imageFile = imageFile;
     }
 
     @Getter
@@ -41,4 +36,6 @@ public class ImageMessage implements Message {
     private String caption;
     @Getter
     private String image;
+    @Getter
+    private File imageFile;
 }

@@ -4,10 +4,15 @@ import com.petersamokhin.bots.sdk.clients.Group;
 import com.petersamokhin.bots.sdk.objects.Message;
 import com.petersamokhin.bots.sdk.utils.vkapi.docs.DocTypes;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.io.FileUtils;
 import ru.alexeyFedechkin.botPlatform.AbstractBot;
 import ru.alexeyFedechkin.botPlatform.BotHandler;
 import ru.alexeyFedechkin.botPlatform.Config.VKConfig;
 import ru.alexeyFedechkin.botPlatform.Message.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * implementation of Abstract bot for VK
@@ -27,7 +32,11 @@ public class VKBot extends AbstractBot {
         });
         group.onPhotoMessage(message -> {
             log.info("receive photo message " + message.getBiggestPhotoUrl(message.getPhotos()));
-            onImageReceive(new ImageMessage(message.getMessageId(),message.authorId(), message.getText(), message.getBiggestPhotoUrl(message.getPhotos())));
+            onImageReceive(new ImageMessage(message.getMessageId(),
+                    message.authorId(),
+                    message.getText(),
+                    message.getBiggestPhotoUrl(message.getPhotos()),
+                    download(message.getBiggestPhotoUrl(message.getPhotos()))));
         });
         group.onAudioMessage(message -> {
             log.info("receive audio message ");
@@ -95,6 +104,21 @@ public class VKBot extends AbstractBot {
                 forwardedMessages(message.getReplayTo()).
                 doc(message.getDocument(), DocTypes.DOC).
                 send();
+    }
+
+    /**
+     * @param url
+     * @return
+     */
+    public File download(String url){
+        File res = null;
+        try {
+            res = File.createTempFile("botPlatform_download", "");
+            FileUtils.copyURLToFile(new URL(url), res);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
 

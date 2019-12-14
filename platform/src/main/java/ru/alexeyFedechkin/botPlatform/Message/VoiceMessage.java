@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -40,4 +41,6 @@ public class VoiceMessage implements Message {
     private String caption;
     @Getter
     private String voice;
+    @Getter
+    private File voiceFile;
 }

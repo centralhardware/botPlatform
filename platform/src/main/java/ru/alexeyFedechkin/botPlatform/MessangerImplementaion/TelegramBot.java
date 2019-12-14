@@ -6,7 +6,9 @@ import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.*;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -16,6 +18,10 @@ import ru.alexeyFedechkin.botPlatform.BotHandler;
 import ru.alexeyFedechkin.botPlatform.Config.TelegramConfig;
 import ru.alexeyFedechkin.botPlatform.Message.*;
 import ru.alexeyFedechkin.botPlatform.Telegram.TelegramLongPolingBot;
+
+import java.io.File;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * implementation of Abstract bot for telegram
@@ -43,11 +49,10 @@ public class TelegramBot extends AbstractBot {
                         botOption.setProxyPort(proxyConfig.getPort());
                         botOption.setProxyType(proxyConfig.getProxyType());
                         bot = new TelegramLongPolingBot(config, this::onUpdate, botOption);
-                        botsApi.registerBot((LongPollingBot) bot);
                     } else {
                         bot = new TelegramLongPolingBot(config, this::onUpdate);
-                        botsApi.registerBot((LongPollingBot) bot);
                     }
+                    botsApi.registerBot((LongPollingBot) bot);
 
                 }
                 case WEB_HOOK:break;
@@ -76,7 +81,11 @@ public class TelegramBot extends AbstractBot {
             }
             if (update.getMessage().hasPhoto()){
                 log.info("receive photo message: " + message.getPhoto().get(0).getFileId());
-                onImageReceive(new ImageMessage(messageId,message.getChatId(), message.getCaption(), message.getPhoto()));
+                onImageReceive(new ImageMessage(messageId,
+                        message.getChatId(),
+                        message.getCaption(),
+                        getBiggestPhotoSize(message.getPhoto()).getFileId(),
+                        downloadFile(getBiggestPhotoSize(message.getPhoto()))));
             }
             if (update.getMessage().hasText()){
                 log.info("receive text message: " + message.getText());
@@ -106,8 +115,13 @@ public class TelegramBot extends AbstractBot {
     @Override
     public void sendImage(ImageMessage message) {
         SendPhoto sendPhoto = new SendPhoto().
-                setChatId(message.getChatId()).
-                setPhoto(message.getImage()).
+                setChatId(message.getChatId());
+        if (message.getImage() == null){
+            sendPhoto.setPhoto(message.getImageFile());
+        } else {
+            sendPhoto.setPhoto(message.getImage());
+        }
+        sendPhoto.setPhoto(message.getImage()).
                 setCaption(message.getCaption());
         if (message.getReplyTo() != 0){
             sendPhoto.setReplyToMessageId((int) message.getReplyTo());
@@ -163,5 +177,31 @@ public class TelegramBot extends AbstractBot {
         } catch (TelegramApiException e) {
             log.info("", e);
         }
+    }
+
+    /**
+     * @param photo
+     * @return
+     */
+    public File downloadFile(PhotoSize photo){
+        if (photo.hasFilePath()){
+            return new File(photo.getFilePath());
+        }
+        GetFile getFile = new GetFile();
+        getFile.setFileId(photo.getFileId());
+        try {
+            return new File(bot.execute(getFile).getFileId());
+        } catch (TelegramApiException e) {
+            log.info("", e);
+        }
+        return null;
+    }
+
+    /**
+     * @param photoSizeList
+     * @return
+     */
+    public static PhotoSize getBiggestPhotoSize(List<PhotoSize> photoSizeList){
+        return photoSizeList.stream().max(Comparator.comparing(PhotoSize::getFileSize)).orElse(null);
     }
 }

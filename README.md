@@ -30,9 +30,18 @@ public static Message helloworld(TextMessage message){
 When the bot receives a message that starts with a slash, 
 if the code contains an annotation with this command, 
 the message will be processed by the method annotated with this annotation,
- ps the text without the command will come to the method
+PS the text without the command will come to the method
 
-#### echo bot example
+### implementation features
+
+#### telegram
+
+for telegram support two variant of implementation:
+
+- long polling: you can use proxy server (if telegram blocked in your country)
+- web hook (not yet implement)
+
+### echo bot example
 
 you can find an example of echo bot in modules Example in the source code 
 of the library
@@ -41,7 +50,8 @@ of the library
 - text
 - photo
 - audio
-- voice  
+- voice
+- document   
 
 ### tests 
 
@@ -53,3 +63,7 @@ create an environment
 ### used library:
 - [TelegramBots](https://github.com/rubenlagus/TelegramBots)
 - [vk-bot-java-sdk](https://github.com/petersamokhin/vk-bot-java-sdk)
+
+### TODO
+
+ - [ ] FSM
