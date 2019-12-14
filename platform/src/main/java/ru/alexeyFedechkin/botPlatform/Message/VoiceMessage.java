@@ -1,6 +1,7 @@
 package ru.alexeyFedechkin.botPlatform.Message;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
 
 import java.util.Objects;
@@ -16,7 +17,9 @@ public class VoiceMessage implements Message {
     }
 
     public VoiceMessage(long chatId, String caption, JSONObject voice) {
-
+        this(chatId,caption);
+        System.out.println(voice);
+        this.voice = voice.getString("url");
     }
 
     public VoiceMessage(long chatId, String caption, String voice) {
@@ -28,7 +31,8 @@ public class VoiceMessage implements Message {
     @Getter
     private long messageId;
     @Getter
-    private long forwardTo;
+    @Setter
+    private long replyTo;
     @Getter
     private long chatId;
     @Getter

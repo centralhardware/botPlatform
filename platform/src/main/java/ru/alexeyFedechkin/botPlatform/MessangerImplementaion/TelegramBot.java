@@ -12,10 +12,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import ru.alexeyFedechkin.botPlatform.AbstractBot;
 import ru.alexeyFedechkin.botPlatform.BotHandler;
 import ru.alexeyFedechkin.botPlatform.Config.TelegramConfig;
-import ru.alexeyFedechkin.botPlatform.Message.AudioMessage;
-import ru.alexeyFedechkin.botPlatform.Message.ImageMessage;
-import ru.alexeyFedechkin.botPlatform.Message.TextMessage;
-import ru.alexeyFedechkin.botPlatform.Message.VoiceMessage;
+import ru.alexeyFedechkin.botPlatform.Message.*;
 import ru.alexeyFedechkin.botPlatform.Telegram.TelegramLongPolingBot;
 
 /**
@@ -54,31 +51,32 @@ public class TelegramBot extends AbstractBot {
      */
     public void onUpdate(Update update) {
         if (update.hasMessage()){
+            var message = update.getMessage();
             if (update.getMessage().hasAudio()){
                 log.info("receive audio message: " + update.getMessage().getAudio().getTitle());
-                onAudioReceive(new AudioMessage(update.getMessage().getChatId(), update.getMessage().getCaption(), update.getMessage().getAudio()));
+                onAudioReceive(new AudioMessage(message.getChatId(),message.getCaption(),message.getAudio()));
             }
             if (update.getMessage().hasVoice()){
                 log.info("receive voice message: " + update.getMessage().getVoice().getFileId());
-                onVoiceReceive(new VoiceMessage(update.getMessage().getChatId(), update.getMessage().getCaption(), update.getMessage().getVoice().getFileId()));
+                onVoiceReceive(new VoiceMessage(message.getChatId(),message.getCaption(),message.getVoice().getFileId()));
             }
             if (update.getMessage().hasPhoto()){
                 log.info("receive photo message: " + update.getMessage().getPhoto().get(0).getFileId());
-                onImageReceive(new ImageMessage(update.getMessage().getChatId(), update.getMessage().getCaption(), update.getMessage().getPhoto()));
+                onImageReceive(new ImageMessage(message.getChatId(), message.getCaption(), message.getPhoto()));
             }
             if (update.getMessage().hasText()){
                 log.info("receive text message: " + update.getMessage().getText());
-                onTextReceive(new TextMessage(update.getMessage().getMessageId() , update.getMessage().getText(), update.getMessage().getChatId()));
+                onTextReceive(new TextMessage(message.getMessageId() ,message.getText(),message.getChatId()));
             }
         }
     }
 
     @Override
     public void sendText(TextMessage message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText(message.getMessage());
-        sendMessage.setReplyToMessageId((int) message.getForwardTo());
+        SendMessage sendMessage = new SendMessage().
+                setChatId(message.getChatId()).
+                setText(message.getMessage()).
+                setReplyToMessageId((int) message.getReplyTo());
         try{
             bot.execute(sendMessage);
             log.info("sent text message: " + message.getMessage());
@@ -89,12 +87,12 @@ public class TelegramBot extends AbstractBot {
 
     @Override
     public void sendImage(ImageMessage message) {
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId());
-        sendPhoto.setPhoto(message.getImage());
-        sendPhoto.setCaption(message.getCaption());
-        if (message.getForwardTo() != 0){
-            sendPhoto.setReplyToMessageId((int) message.getForwardTo());
+        SendPhoto sendPhoto = new SendPhoto().
+                setChatId(message.getChatId()).
+                setPhoto(message.getImage()).
+                setCaption(message.getCaption());
+        if (message.getReplyTo() != 0){
+            sendPhoto.setReplyToMessageId((int) message.getReplyTo());
         }
         try {
             bot.execute(sendPhoto);
@@ -106,11 +104,11 @@ public class TelegramBot extends AbstractBot {
 
     @Override
     public void sendAudio(AudioMessage message) {
-        SendAudio sendAudio = new SendAudio();
-        sendAudio.setChatId(message.getChatId());
-        sendAudio.setCaption(message.getCaption());
-        sendAudio.setAudio(message.getAudio());
-        sendAudio.setReplyToMessageId((int) message.getForwardTo());
+        SendAudio sendAudio = new SendAudio().
+                setChatId(message.getChatId()).
+                setCaption(message.getCaption()).
+                setAudio(message.getAudio()).
+                setReplyToMessageId((int) message.getReplayTo());
         try {
             bot.execute(sendAudio);
             log.info("sent audio message");
@@ -121,11 +119,11 @@ public class TelegramBot extends AbstractBot {
 
     @Override
     public void sendVoice(VoiceMessage message) {
-        SendVoice sendVoice = new SendVoice();
-        sendVoice.setChatId(message.getChatId());
-        sendVoice.setCaption(message.getCaption());
-        sendVoice.setVoice(message.getVoice());
-        sendVoice.setReplyToMessageId((int) message.getForwardTo());
+        SendVoice sendVoice = new SendVoice().
+                setChatId(message.getChatId()).
+                setCaption(message.getCaption()).
+                setVoice(message.getVoice()).
+                setReplyToMessageId((int) message.getReplyTo());
         try {
             bot.execute(sendVoice);
             log.info("sent voice message");

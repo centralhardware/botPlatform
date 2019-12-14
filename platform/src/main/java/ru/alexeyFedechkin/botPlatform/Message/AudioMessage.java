@@ -2,6 +2,7 @@ package ru.alexeyFedechkin.botPlatform.Message;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.Audio;
 
@@ -20,6 +21,8 @@ public class AudioMessage implements Message {
 
     public AudioMessage(long chatId, String caption, @NonNull JSONObject audio) {
         this(chatId, caption);
+        this.audio = audio.getString("attach1");
+        System.out.println(audio);
     }
 
     public AudioMessage(long chatId, String caption, @NonNull Audio audio) {
@@ -35,7 +38,8 @@ public class AudioMessage implements Message {
     @Getter
     private long messageId;
     @Getter
-    private long forwardTo;
+    @Setter
+    private long replayTo;
     @Getter
     private long chatId;
     @Getter

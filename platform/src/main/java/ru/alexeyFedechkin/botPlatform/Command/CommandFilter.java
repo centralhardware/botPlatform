@@ -31,16 +31,22 @@ public class CommandFilter {
                 throw new RuntimeException("commandName contain space for method " + method.getName());
             }
             if (method.getParameterCount() != 1){
-                throw new RuntimeException("methods " + method.getName() + " annotated @Command have " + method.getParameterCount() + " but expected 1");
+                throw new RuntimeException("methods " + method.getName() + " annotated @Command have " +
+                        method.getParameterCount() + " but expected 1");
             }
             if (!method.getReturnType().equals(Message.class)){
-                throw new RuntimeException("methods " + method.getName() + " annotated @Command have return type" + method.getReturnType() + " but expected Message");
+                throw new RuntimeException("methods " + method.getName() + " annotated @Command have return type" +
+                        method.getReturnType() + " but expected Message");
             }
             if (!method.getParameterTypes()[0].equals(TextMessage.class)){
-                throw new RuntimeException("methods " + method.getName() + " annotated @Command have parameter " + method.getParameterTypes()[0].getName() + " but expected TextMessage");
+                throw new RuntimeException("methods " + method.getName() + " annotated @Command have parameter " +
+                        method.getParameterTypes()[0].getName() + " but expected TextMessage");
             }
             if (!Modifier.isStatic(method.getModifiers())){
                 throw new RuntimeException("methods " + method.getName() + " annotated @Command is none static");
+            }
+            if (!method.getAnnotation(Command.class).commandName().startsWith("/")){
+                throw new RuntimeException("field commandName in @Command must start with / for method " + method.getName());
             }
             commands.put(method.getAnnotation(Command.class).commandName(), method);
         }
@@ -56,7 +62,8 @@ public class CommandFilter {
             for (String commandName : commands.keySet()){
                 if (message.getMessage().startsWith(commandName)){
                     try {
-                        Message answer = (Message) commands.get(commandName).invoke(null,message.answer(message.getMessage().replace(commandName,"")));
+                        Message answer = (Message) commands.get(commandName).invoke(
+                                null,message.answer(message.getMessage().replace(commandName,"")));
                         throw new CommandFilteredException(answer);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         log.info("", e);

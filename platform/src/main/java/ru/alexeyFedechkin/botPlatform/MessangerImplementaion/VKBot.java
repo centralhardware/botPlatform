@@ -45,40 +45,45 @@ public class VKBot extends AbstractBot {
 
     @Override
     public void sendText(TextMessage message) {
-        log.info("send message: " + message.getMessage());
         new Message().
                 from(group).
                 to((int) message.getChatId()).
                 text(message.getMessage()).
-                forwardedMessages(message.getForwardTo()).
+                forwardedMessages(message.getReplyTo()).
                 send();
+        log.info("send message: " + message.getMessage());
     }
 
     @Override
     public void sendImage(ImageMessage message) {
-        log.info("send photo message: " + message.getCaption());
         new Message().
                 from(group).
                 to((int) message.getChatId()).
                 photo(message.getImage()).
-                forwardedMessages(message.getForwardTo()).
+                forwardedMessages(message.getReplyTo()).
                 send();
+        log.info("send photo message: " + message.getCaption());
     }
 
     @Override
     public void sendAudio(AudioMessage message) {
-        log.info("send audio message: " + message.getCaption());
         new Message().
                 from(group).
                 to((int) message.getChatId()).
-                doc(message.getAudio(), DocTypes.AUDIO_MESSAGE).
-                forwardedMessages(message.getForwardTo()).
+                forwardedMessages(message.getReplayTo()).
+                doc(message.getAudio()).
                 send();
+        log.info("send audio message: " + message.getCaption());
     }
 
     @Override
     public void sendVoice(VoiceMessage message) {
-
+        new Message().
+                from(group).
+                to((int) message.getChatId()).
+                forwardedMessages(message.getReplyTo()).
+                sendVoiceMessage(message.getVoice());
+        log.info("send voice message: " + message.getCaption());
     }
 
 

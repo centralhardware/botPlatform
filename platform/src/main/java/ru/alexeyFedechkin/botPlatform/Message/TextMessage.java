@@ -3,6 +3,7 @@ package ru.alexeyFedechkin.botPlatform.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 /**
  * text message presentation
@@ -27,7 +28,8 @@ public class TextMessage implements Message {
     @Getter
     private long messageId;
     @Getter
-    private long forwardTo;
+    @Setter
+    private long replyTo;
     @Getter
     private String message;
     @Getter
@@ -40,7 +42,7 @@ public class TextMessage implements Message {
         var msg = new TextMessage();
         msg.message = message;
         msg.chatId = chatId;
-        msg.forwardTo = this.messageId;
+        msg.replyTo = this.messageId;
         return msg;
     }
 
