@@ -44,7 +44,11 @@ public class VKBot extends AbstractBot {
         });
         group.onVoiceMessage(message -> {
             log.info("receive voice message " );
-            onVoiceReceive(new VoiceMessage(message.getMessageId(),message.authorId(), message.getText(), message.getVoiceMessage()));
+            onVoiceReceive(new VoiceMessage(message.getMessageId(),
+                    message.authorId(),
+                    message.getText(),
+                    message.getVoiceMessage().getString("url"),
+                    download(message.getVoiceMessage().getString("url"))));
         });
         group.onDocMessage(message -> {
             log.info("receive document message");

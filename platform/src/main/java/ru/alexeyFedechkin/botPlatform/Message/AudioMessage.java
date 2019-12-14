@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.Audio;
+import org.telegram.telegrambots.meta.api.objects.File;
 
 import java.util.Objects;
 
@@ -42,5 +43,7 @@ public class AudioMessage implements Message {
     private String caption;
     @Getter
     private String audio;
+    @Getter
+    private File audioFile;
 
 }

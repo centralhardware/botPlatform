@@ -12,20 +12,15 @@ import java.util.Objects;
  */
 public class VoiceMessage implements Message {
 
-    private VoiceMessage(Integer messageId,long chatId, String caption){
+    private VoiceMessage(Integer messageId,long chatId, String caption, File voiceFile){
         this.chatId = chatId;
         this.caption = Objects.requireNonNullElse(caption, "");
         this.messageId = messageId;
+        this.voiceFile = voiceFile;
     }
 
-    public VoiceMessage(Integer messageId,long chatId, String caption, JSONObject voice) {
-        this(messageId,chatId,caption);
-        System.out.println(voice);
-        this.voice = voice.getString("url");
-    }
-
-    public VoiceMessage(Integer messageId,long chatId, String caption, String voice) {
-        this(messageId,chatId,caption);
+    public VoiceMessage(Integer messageId,long chatId, String caption, String voice, File voiceFile) {
+        this(messageId,chatId,caption, voiceFile);
         this.voice = voice;
 
     }

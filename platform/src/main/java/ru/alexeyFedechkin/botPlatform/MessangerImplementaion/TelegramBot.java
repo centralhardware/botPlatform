@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Voice;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
@@ -77,7 +78,11 @@ public class TelegramBot extends AbstractBot {
             }
             if (update.getMessage().hasVoice()){
                 log.info("receive voice message: " + message.getVoice().getFileId());
-                onVoiceReceive(new VoiceMessage(messageId,message.getChatId(),message.getCaption(),message.getVoice().getFileId()));
+                onVoiceReceive(new VoiceMessage(messageId,
+                        message.getChatId(),
+                        message.getCaption(),
+                        message.getVoice().getFileId(),
+                        downloadFile(message.getVoice())));
             }
             if (update.getMessage().hasPhoto()){
                 log.info("receive photo message: " + message.getPhoto().get(0).getFileId());
@@ -189,6 +194,21 @@ public class TelegramBot extends AbstractBot {
         }
         GetFile getFile = new GetFile();
         getFile.setFileId(photo.getFileId());
+        try {
+            return new File(bot.execute(getFile).getFileId());
+        } catch (TelegramApiException e) {
+            log.info("", e);
+        }
+        return null;
+    }
+
+    /**
+     * @param voice
+     * @return
+     */
+    public File downloadFile(Voice voice){
+        GetFile getFile = new GetFile();
+        getFile.setFileId(voice.getFileId());
         try {
             return new File(bot.execute(getFile).getFileId());
         } catch (TelegramApiException e) {
